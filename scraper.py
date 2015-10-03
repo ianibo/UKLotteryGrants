@@ -84,7 +84,7 @@ def scrape_lottery() :
       scrape_page(browser);
 
       while browser.is_element_present_by_xpath('//input[@id="ctl00_phMainContent_grantSearchResults_nextPageBottom"]'):
-        print "page %d" & page
+        print "page %d" % page
         next_page_button = browser.find_by_xpath('//input[@id="ctl00_phMainContent_grantSearchResults_nextPageBottom"]')
         next_page_button.click()
         scrape_page(browser);
