@@ -36,7 +36,7 @@ from string import ascii_lowercase
 
 def scrape_page(browser):
 
-  cfg = ['a','b','c','d','e','f']
+  cfg = ['Recipient','Description','Amount','Date','LocalAuthority','Distributing Body']
 
 
   if not browser.is_element_present_by_xpath('//table[@class="tblSearchResults"]', wait_time=100):
@@ -58,7 +58,6 @@ def scrape_page(browser):
       ctr = 0;
       for cell in tds:
         if ( ctr==0 ):
-          print "Extract id"
           print cell.text
           row_properties['grantId'] = cell.find_by_tag("a").first['href']
         row_properties[cfg[ctr]]=cell.text
@@ -66,8 +65,7 @@ def scrape_page(browser):
     row_counter = row_counter +1
 
     if row_properties is not None :
-      # scraperwiki.sqlite.save(unique_keys=['grantId'], data=row_properties)
-      print row_properties
+      scraperwiki.sqlite.save(unique_keys=['grantId'], data=row_properties)
 
   return;
 
@@ -83,6 +81,11 @@ def scrape_lottery() :
       submit_button = browser.find_by_xpath('//input[@type="submit"]').first
       submit_button.click()
       scrape_page(browser);
+
+      while browser.is_element_present_by_xpath('//input[@id="ctl00_phMainContent_grantSearchResults_nextPageBottom"]'):
+        next_page_button = browser.find_by_xpath('//input[@id="ctl00_phMainContent_grantSearchResults_nextPageBottom"]')
+        next_page_button.click()
+        scrape_page(browser);
 
   except:
     print "Unexpected error:", sys.exc_info()
