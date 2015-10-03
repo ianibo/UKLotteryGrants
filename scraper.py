@@ -53,7 +53,6 @@ def scrape_page(browser):
     if ( row_counter == 0 ):
       print "Skip header"
     else:
-      print "processing row";
       tds = row.find_by_tag("td")
       ctr = 0;
       for cell in tds:
@@ -75,6 +74,8 @@ def scrape_lottery() :
     print "platform %s" % platform.system()
     print "Python ", sys.version_info
 
+    page = 0;
+
     with Browser('phantomjs') as browser:
       # browser.visit('http://www.lottery.culture.gov.uk/SearchResults.aspx')
       browser.visit('http://www.lottery.culture.gov.uk/AdvancedSearch.aspx')
@@ -83,9 +84,11 @@ def scrape_lottery() :
       scrape_page(browser);
 
       while browser.is_element_present_by_xpath('//input[@id="ctl00_phMainContent_grantSearchResults_nextPageBottom"]'):
+        print "page %d" & page
         next_page_button = browser.find_by_xpath('//input[@id="ctl00_phMainContent_grantSearchResults_nextPageBottom"]')
         next_page_button.click()
         scrape_page(browser);
+        page = page + 1
 
   except:
     print "Unexpected error:", sys.exc_info()
