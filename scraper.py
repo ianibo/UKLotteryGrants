@@ -57,7 +57,7 @@ def scrape_page(browser):
       ctr = 0;
       for cell in tds:
         if ( ctr==0 ):
-          print cell.text
+          # print cell.text  // This causes an ordinal not in range error - so omit for now
           row_properties['grantId'] = cell.find_by_tag("a").first['href']
         row_properties[cfg[ctr]]=cell.text
         ctr = ctr +1
